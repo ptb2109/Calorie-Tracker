@@ -12,6 +12,8 @@ calorie-tracker/
 │   ├── src/config.js      # Reads and checks settings from .env
 │   ├── src/db.js          # MongoDB connection
 │   ├── src/index.js       # Entry point: settings -> database -> start listening
+│   ├── src/models/        # Mongoose models: User, FoodEntry, ExerciseEntry
+│   ├── scripts/           # Small helper scripts (try-models.js)
 │   └── .env.example       # Settings template; copy to .env
 └── client/                # React app (added in Step 7)
 ```

@@ -6,7 +6,8 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "node --watch --env-file=.env src/index.js",
-    "start": "node --env-file=.env src/index.js"
+    "start": "node --env-file=.env src/index.js",
+    "try:models": "node --env-file=.env scripts/try-models.js"
   },
   "engines": {
     "node": ">=20.6"
