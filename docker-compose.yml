@@ -1,0 +1,26 @@
+# Development setup: runs the app inside containers, so Node and MongoDB don't need
+# to be installed on your computer.
+services:
+  mongo:
+    image: mongo:8                     # official MongoDB 8 database image
+    ports:
+      - "127.0.0.1:27017:27017"        # reachable from this Mac only (no password in development)
+    volumes:
+      - mongo_data:/data/db            # keep the database files when the container is removed
+
+  server:
+    image: node:24-alpine              # official Node.js image (Node 24 LTS on a small Linux)
+    init: true                         # passes Ctrl + C on to Node so it can shut down cleanly
+    working_dir: /app                  # commands run in /app inside the container
+    command: sh -c "npm install && exec npm run dev"   # install packages, then start with auto-restart
+    ports:
+      - "4000:4000"                    # your Mac's port 4000 -> the container's port 4000
+    volumes:
+      - ./server:/app                  # share the server folder, so edits in VS Code reach the container
+      - server_node_modules:/app/node_modules   # keep installed packages inside Docker, not in your folder
+    depends_on:
+      - mongo                          # start the database container first
+
+volumes:
+  server_node_modules:
+  mongo_data:

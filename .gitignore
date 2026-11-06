@@ -1,0 +1,11 @@
+# Dependencies (re-created by `npm install`, never committed)
+node_modules/
+
+# Secrets and local settings
+.env
+
+# Build output, test coverage, logs, OS files
+dist/
+coverage/
+*.log
+.DS_Store
