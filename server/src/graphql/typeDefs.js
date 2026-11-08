@@ -25,6 +25,13 @@ export const typeDefs = `#graphql
     goals: Goals!
   }
 
+  "What signup and login return: a token to send with later requests, and the user."
+  type AuthPayload {
+    "Send this with every request as the header  Authorization: Bearer <token>"
+    token: String!
+    user: User!
+  }
+
   "Calories (kcal) and macros (grams)."
   type Nutrients {
     calories: Float!
@@ -72,10 +79,17 @@ export const typeDefs = `#graphql
   }
 
   type Query {
-    "The current user."
+    "The logged-in user, or null if no valid token was sent."
     me: User
     "Entries and totals for one day."
     dailySummary(date: String!): DailySummary!
+  }
+
+  input SignupInput {
+    email: String!
+    "8 to 72 characters."
+    password: String!
+    name: String!
   }
 
   "Nutrition per 100 g, as food databases list it."
@@ -117,6 +131,12 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
+    "Create an account. Returns a token, so the new user is logged in straight away."
+    signup(input: SignupInput!): AuthPayload!
+    "Log in with email and password. Returns a new token."
+    login(email: String!, password: String!): AuthPayload!
+
+    # Everything below needs a logged-in user.
     updateGoals(input: GoalsInput!): User!
     addFoodEntry(input: FoodEntryInput!): FoodEntry!
     updateFoodEntry(id: ID!, input: FoodEntryUpdateInput!): FoodEntry!

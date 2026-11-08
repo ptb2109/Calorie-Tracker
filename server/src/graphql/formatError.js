@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { unwrapResolverError } from '@apollo/server/errors';
-import { NotFoundError, BadInputError } from '../services/errors.js';
+import { NotFoundError, BadInputError, AuthenticationError } from '../services/errors.js';
 
 // Decides what an error looks like to the client. Expected problems get a clear message and a
 // code the frontend can check. Unexpected ones are logged here and hidden from the client,
@@ -25,6 +25,10 @@ export function formatError(formattedError, error) {
 
   if (original instanceof NotFoundError) {
     return { ...formattedError, message: original.message, extensions: { code: 'NOT_FOUND' } };
+  }
+
+  if (original instanceof AuthenticationError) {
+    return { ...formattedError, message: original.message, extensions: { code: 'UNAUTHENTICATED' } };
   }
 
   // Errors GraphQL raised itself (a typo in the query, a missing argument) are safe to show as they are.

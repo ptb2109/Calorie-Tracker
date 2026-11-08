@@ -9,7 +9,7 @@ import { formatError } from './graphql/formatError.js';
 
 // Builds and returns the Express app, without starting it.
 // Keeping "build" separate from "listen" lets tests use the app without a real port.
-export async function createApp() {
+export async function createApp(config) {
   const app = express();
 
   // Parse JSON request bodies into req.body (GraphQL requests are JSON).
@@ -28,7 +28,10 @@ export async function createApp() {
   // GraphQL API at /graphql. Apollo must finish starting before it can handle requests.
   const apollo = new ApolloServer({ typeDefs, resolvers, formatError });
   await apollo.start();
-  app.use('/graphql', expressMiddleware(apollo, { context: buildContext }));
+  app.use('/graphql', expressMiddleware(apollo, {
+    context: ({ req }) => buildContext({ req, config }),
+  }));
+  
 
   return app;
 }

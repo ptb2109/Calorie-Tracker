@@ -10,7 +10,7 @@ async function main() {
   await connectDB(config.mongoUri);
 
   // 3. Only now build the app (including the GraphQL API) and start listening.
-  const app = await createApp();
+  const app = await createApp(config);
   const server = app.listen(config.port, () => {
     console.log(`Server ready at http://localhost:${config.port}`);
     console.log(`GraphQL playground at http://localhost:${config.port}/graphql`);

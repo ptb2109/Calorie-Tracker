@@ -14,3 +14,11 @@ export class BadInputError extends Error {
     this.name = 'BadInputError';
   }
 }
+
+// The request needs a logged-in user, or the email/password were wrong.
+export class AuthenticationError extends Error {
+  constructor(message = 'You must be logged in') {
+    super(message);
+    this.name = 'AuthenticationError';
+  }
+}

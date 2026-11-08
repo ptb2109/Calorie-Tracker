@@ -14,8 +14,10 @@
   "dependencies": {
     "@apollo/server": "^5.0.0",
     "@as-integrations/express5": "^1.1.2",
+    "bcryptjs": "^3.0.3",
     "express": "^5.1.0",
     "graphql": "^16.11.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.9.0"
   }
 }

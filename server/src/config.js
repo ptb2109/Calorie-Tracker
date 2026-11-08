@@ -2,7 +2,7 @@
 // If something is missing or wrong, we stop straight away with a clear message ("fail fast")
 // instead of crashing later with a confusing error.
 
-const REQUIRED = ['MONGO_URI'];
+const REQUIRED = ['MONGO_URI', 'JWT_SECRET'];
 
 export function loadConfig(env = process.env) {
   const missing = REQUIRED.filter((name) => !env[name]);
@@ -19,9 +19,16 @@ export function loadConfig(env = process.env) {
     throw new Error(`PORT must be a whole number from 1 to 65535, but it is "${env.PORT}".`);
   }
 
+  // A short secret is easy to guess, so refuse to start with one.
+  if (env.JWT_SECRET.length < 32) {
+    throw new Error('JWT_SECRET must be at least 32 characters long. See server/.env.example for how to generate one.');
+  }
+
   // Object.freeze stops any other code from changing the settings by accident.
   return Object.freeze({
     port,
     mongoUri: env.MONGO_URI,
+    jwtSecret: env.JWT_SECRET,
+    jwtExpiresIn: env.JWT_EXPIRES_IN || '7d',
   });
 }
