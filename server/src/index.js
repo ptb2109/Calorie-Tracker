@@ -9,10 +9,11 @@ async function main() {
   // 2. Connect to the database before accepting any requests.
   await connectDB(config.mongoUri);
 
-  // 3. Only now start listening for requests.
-  const app = createApp();
+  // 3. Only now build the app (including the GraphQL API) and start listening.
+  const app = await createApp();
   const server = app.listen(config.port, () => {
     console.log(`Server ready at http://localhost:${config.port}`);
+    console.log(`GraphQL playground at http://localhost:${config.port}/graphql`);
   });
 
   // 4. On Ctrl + C (SIGINT) or a stop request (SIGTERM), finish cleanly.

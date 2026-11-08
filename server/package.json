@@ -6,14 +6,16 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "node --watch --env-file=.env src/index.js",
-    "start": "node --env-file=.env src/index.js",
-    "try:models": "node --env-file=.env scripts/try-models.js"
+    "start": "node --env-file=.env src/index.js"
   },
   "engines": {
     "node": ">=20.6"
   },
   "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "@as-integrations/express5": "^1.1.2",
     "express": "^5.1.0",
+    "graphql": "^16.11.0",
     "mongoose": "^8.9.0"
   }
 }

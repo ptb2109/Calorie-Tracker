@@ -7,13 +7,14 @@ A MERN fitness and calorie tracker. React talks to a GraphQL API (Apollo Server 
 ```text
 calorie-tracker/
 ├── docs/requirements.md   # What we are building and why (read this first)
-├── server/                # Node + Express (+ GraphQL from Step 4)
+├── server/                # Node + Express + Apollo Server (GraphQL)
 │   ├── src/app.js         # Builds the Express app (no network listening here)
 │   ├── src/config.js      # Reads and checks settings from .env
 │   ├── src/db.js          # MongoDB connection
 │   ├── src/index.js       # Entry point: settings -> database -> start listening
 │   ├── src/models/        # Mongoose models: User, FoodEntry, ExerciseEntry
-│   ├── scripts/           # Small helper scripts (try-models.js)
+│   ├── src/services/      # Business logic: calorie maths, entries, daily summary
+│   ├── src/graphql/       # GraphQL schema, resolvers, request context, error formatting
 │   └── .env.example       # Settings template; copy to .env
 └── client/                # React app (added in Step 7)
 ```
@@ -25,7 +26,7 @@ cp server/.env.example server/.env   # once
 docker compose up                    # Ctrl + C to stop
 ```
 
-Then open http://localhost:4000/health (it should say `"database": "connected"`).
+Then open http://localhost:4000/health (it should say `"database": "connected"`), and http://localhost:4000/graphql for the GraphQL playground.
 
 Run any npm command inside the container, for example adding a package:
 
