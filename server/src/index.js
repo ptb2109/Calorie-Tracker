@@ -5,7 +5,10 @@ import { createApp } from './app.js';
 async function main() {
   // 1. Check the settings first; this throws if something is missing.
   const config = loadConfig();
-
+  if (config.usdaApiKey === 'DEMO_KEY') {
+    console.warn('USDA_API_KEY is not set: food search uses the shared DEMO_KEY (30 searches per hour).');
+  }
+  
   // 2. Connect to the database before accepting any requests.
   await connectDB(config.mongoUri);
 

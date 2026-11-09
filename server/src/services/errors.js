@@ -22,3 +22,12 @@ export class AuthenticationError extends Error {
     this.name = 'AuthenticationError';
   }
 }
+
+// An outside service (such as the USDA food database) is down, too slow or refusing requests.
+// Not the user's fault and not a bug in our code; trying again later may work.
+export class ExternalServiceError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ExternalServiceError';
+  }
+}

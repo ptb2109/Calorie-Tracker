@@ -30,5 +30,6 @@ export function loadConfig(env = process.env) {
     mongoUri: env.MONGO_URI,
     jwtSecret: env.JWT_SECRET,
     jwtExpiresIn: env.JWT_EXPIRES_IN || '7d',
+    usdaApiKey: env.USDA_API_KEY || 'DEMO_KEY', // OPTIONAL: falls back to USDA's shared demo key
   });
 }
