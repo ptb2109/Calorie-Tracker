@@ -2,6 +2,7 @@ import { signup, login } from '../services/auth.js';
 import { AuthenticationError } from '../services/errors.js';
 import { getUser, updateGoals } from '../services/users.js';
 import { getDailySummary } from '../services/summary.js';
+import { searchFoods } from '../services/foodSearch.js';
 import {
   addFoodEntry,
   updateFoodEntry,
@@ -27,6 +28,11 @@ export const resolvers = {
     // Guests get null instead of an error, so the app can simply ask "am I logged in?"
     me: (_parent, _args, { userId }) => (userId ? getUser(userId) : null),
     dailySummary: (_parent, { date }, context) => getDailySummary(requireUser(context), date),
+    //Logged-in users only
+    searchFoods: (_parent,{ query }, context) => {
+      requireUser(context);
+      return searchFoods(query, context.config);
+    },
   },
 
   Mutation: {

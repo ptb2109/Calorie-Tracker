@@ -78,11 +78,27 @@ export const typeDefs = `#graphql
     exerciseEntries: [ExerciseEntry!]!
   }
 
+
+  "A food from the USDA database, with its nutrition per 100 g."
+  type Food {
+    "USDA FoodData Central id. Send it as fdcId when logging this food."
+    fdcId: Int!
+    name: String!
+    "Brand owner for packaged foods; null for generic foods."
+    brand: String
+    "Where USDA's data comes from, e.g. Foundation, SR Legacy, Survey (FNDDS) or Branded."
+    dataType: String!
+    "Calories and macros per 100 g. Send them as per100g when logging this food."
+    per100g: Nutrients!
+  }
+
   type Query {
     "The logged-in user, or null if no valid token was sent."
     me: User
     "Entries and totals for one day."
     dailySummary(date: String!): DailySummary!
+    "Search the USDA food database (logged-in users only). The search must be 2 to 100 characters."
+    searchFoods(query: String!): [Food!]!
   }
 
   input SignupInput {

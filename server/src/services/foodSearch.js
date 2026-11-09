@@ -1,5 +1,6 @@
 import { BadInputError, ExternalServiceError } from './errors.js';
 import { round1 } from './nutrition.js';
+import { createCache } from './cache.js';
 
 // The adapter between our app and the USDA FoodData Central database.
 // It is the only file that knows USDA's address, request format and reply format;
@@ -15,12 +16,24 @@ const FAT_ID = 1004;
 const CARBS_ID = 1005;
 
 const UNAVAILABLE = 'Food search is unavailable right now. You can still enter the food manually.';
+// Remember search results for a day (nutrition facts rarely change) so repeated searches
+// are instant and don't use up USDA's limit of 1,000 requests per hour, shared by all our users.
+const CACHE_HOURS = 24;
+const cache = createCache({ ttlMs: CACHE_HOURS * 60 * 60 * 1000, maxEntries: 500 });
 
 export async function searchFoods(query, config) {
   // 1. Check our own input before spending a request on it.
   const text = query.trim();
   if (text.length < 2) throw new BadInputError('Type at least 2 characters to search');
   if (text.length > 100) throw new BadInputError('Search must be 100 characters or fewer');
+    // "Banana", "banana " and "BANANA" are the same search, so they share one cache entry.
+  const cacheKey = text.toLowerCase().replace(/\s+/g, ' ');
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    console.log(`Food search "${cacheKey}": from cache`);
+    return cached;
+  }
+  console.log(`Food search "${cacheKey}": asking USDA`);
 
   // 2. Ask USDA. A network failure or timeout lands in the catch block.
   let response;
@@ -56,8 +69,12 @@ export async function searchFoods(query, config) {
   }
 
   // 5. Translate each USDA item into our Food shape, drop unusable ones, keep the first few.
-  return data.foods.map(toFood).filter(Boolean).slice(0, MAX_RESULTS);
+  const foods = data.foods.map(toFood).filter(Boolean).slice(0, MAX_RESULTS);
+  cache.set(cacheKey, foods); // only successful answers reach this line, so errors are never cached
+  return foods;
 }
+   
+
 
 // Turns one USDA search result into our Food shape, or null if it lacks what we need.
 function toFood(item) {
