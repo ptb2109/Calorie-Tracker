@@ -79,6 +79,17 @@ export const typeDefs = `#graphql
   }
 
 
+  "Calorie totals for one day, used by the weekly chart."
+  type DayTotal {
+    date: String!
+    eaten: Float!
+    burned: Float!
+    "eaten - burned"
+    net: Float!
+    "The user's current calorie goal."
+    goal: Int!
+  }
+
   "A food from the USDA database, with its nutrition per 100 g."
   type Food {
     "USDA FoodData Central id. Send it as fdcId when logging this food."
@@ -99,6 +110,8 @@ export const typeDefs = `#graphql
     dailySummary(date: String!): DailySummary!
     "Search the USDA food database (logged-in users only). The search must be 2 to 100 characters."
     searchFoods(query: String!): [Food!]!
+    "Daily totals for the days up to and including endDate, oldest first (1 to 31 days)."
+    history(endDate: String!, days: Int = 7): [DayTotal!]!
   }
 
   input SignupInput {

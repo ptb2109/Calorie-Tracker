@@ -1,0 +1,256 @@
+/* App-wide styles. Kept small on purpose: readable, tidy, and usable on a phone. */
+
+/* Design tokens: colours and sizes used everywhere, defined once. */
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #1d2433;
+  --muted: #6b7280;
+  --accent: #0f766e;
+  --danger: #b91c1c;
+  --border: #d1d5db;
+  --radius: 12px;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box; /* width includes padding and border, so layouts add up as expected */
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 720px; /* comfortable reading width on big screens; full width on phones */
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+/* A white panel used to group each part of the page. */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+}
+
+/* Forms */
+label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+}
+
+button {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* A quieter button, e.g. "Log out" or "Cancel". */
+button.secondary {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* Small helpers */
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap; /* items wrap onto the next line on narrow screens */
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.error {
+  color: var(--danger);
+}
+/* ---------- Step 8: the app screens ---------- */
+
+h2 {
+  font-size: 1.1rem;
+  margin: 0 0 12px;
+}
+
+h3 {
+  font-size: 0.95rem;
+  margin: 16px 0 4px;
+}
+
+.success {
+  color: var(--accent);
+}
+
+/* Header: title on the left, name and log-out on the right */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Inputs inside a row share the space instead of each taking the full width */
+.row > input,
+.row > label {
+  flex: 1 1 140px;
+}
+
+.row input,
+.row select {
+  margin-top: 4px;
+}
+
+.day-picker input {
+  margin-top: 0;
+}
+
+/* Progress bar: net calories against the goal */
+.progress {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress > div {
+  height: 100%;
+  background: var(--accent);
+}
+
+.progress.over > div {
+  background: var(--danger);
+}
+
+/* Small number tiles in the summary */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.stat {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 1.15rem;
+}
+
+/* Lists of entries */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* A plain text-style button, used for "Delete" */
+button.link {
+  background: none;
+  border: none;
+  color: var(--danger);
+  padding: 4px 6px;
+}
+
+/* Food search results: each one is a button you can pick */
+.results {
+  margin: 12px 0;
+}
+
+.results button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  color: var(--text);
+  border-color: var(--border);
+  margin-bottom: 6px;
+}
+
+.results button[aria-pressed='true'] {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+}
+
+/* Tabs to switch between search and manual entry */
+.tabs {
+  margin-bottom: 12px;
+}
+
+/* The weekly chart (an SVG drawing) */
+.chart {
+  width: 100%;
+  height: auto;
+}
+
+.chart .bar {
+  fill: var(--accent);
+}
+
+.chart .bar.over {
+  fill: var(--danger);
+}
+
+.chart .goal-line {
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+
+.chart text {
+  font-size: 13px;
+  fill: var(--muted);
+  text-anchor: middle;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
